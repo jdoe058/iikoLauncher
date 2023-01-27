@@ -10,6 +10,9 @@
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <XmlDataProvider x:Key="serversProvider" Source="../../iikoLauncher.xml" XPath="Servers"/>
+    </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Файл">
@@ -21,7 +24,6 @@
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem Content="Готов"/>
-
         </StatusBar>
         <StackPanel DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal" Margin="3">
@@ -51,14 +53,19 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Вызов (отл.):"/>
-                <TextBlock TextWrapping="Wrap" Width="300" Text="C:/Program File/iiko/iikoRMS/826/BackOffice.exe -login admin -password password"/>
+                <TextBlock TextWrapping="Wrap" Width="300" Text="C:/Program File/iiko/iikoRMS/826/BackOffice.exe -url http://localhost:8080/resto -login admin -password password"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Поиск:"/>
                 <TextBox Width="300" Text=""/>
             </StackPanel>
         </StackPanel>
-        <TreeView >
+        <TreeView ItemsSource="{Binding Source={StaticResource serversProvider}, XPath=Server}">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding XPath=Server}">
+                    <TextBlock Text="{Binding XPath=@Name}"/>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
         </TreeView>
     </DockPanel>
 </Window>
