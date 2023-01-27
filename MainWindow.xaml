@@ -4,9 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:iikoLauncher"
+        xmlns:vm="clr-namespace:iikoLauncher.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="{Binding Title}" Height="450" Width="400" >
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
     <Grid>
-        
+        <TextBox 
+            Margin="50" 
+            Height="16" 
+            Width="300"
+            Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"/>
     </Grid>
 </Window>
