@@ -40,11 +40,11 @@
         <StackPanel DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Логин:"/>
-                <TextBox Width="300" Text="admin"/>
+                <TextBox Width="300" Text="{Binding Login}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Пароль:"/>
-                <PasswordBox Width="300" Password="admin"/>
+                <TextBox Width="300" Text="{Binding Password}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Margin="3,0" Width="70" Content="Войти" Command="{Binding LaunchOfficeCommand}" CommandParameter="{Binding SelectedItem.Attributes, ElementName=dataGrid }"/>

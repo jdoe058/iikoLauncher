@@ -57,6 +57,30 @@ namespace iikoLauncher.ViewModels
 
         #endregion
 
+        #region Login : string - Логин
+        /// <summary>Логин</summary>
+        private string _Login = "admin";
+
+        /// <summary>Логин</summary>
+        public string Login
+        {
+            get => _Login;
+            set => Set(ref _Login, value);
+        }
+        #endregion
+
+        #region Password : string - Пароль
+        /// <summary>Пароль</summary>
+        private string _Password = "password";
+
+        /// <summary>Пароль</summary>
+        public string Password
+        {
+            get => _Password;
+            set => Set(ref _Password, value);
+        }
+        #endregion
+
         #region Команды
 
         #region CloseApplicationCommand
@@ -88,6 +112,10 @@ namespace iikoLauncher.ViewModels
         private void OnLaunchOfficeCommandExecuted(object p)
         {
             var Attr = p as XmlAttributeCollection;
+
+            bool isChain = Equals(Attr["IsChain"]?.Value,"True");
+            string version = Attr["Version"].Value;
+
             string pattern = @"^(https?)://(\w+):?(\d*)(/resto)$";
 
             GroupCollection gc = Regex.Match(Attr["URL"].Value, pattern).Groups;
@@ -97,7 +125,11 @@ namespace iikoLauncher.ViewModels
             string port = gc[3].Value;
             string suffix = gc[4].Value;
 
-            MessageBox.Show(protocol + "\n" + address + "\n" + port + "\n" + suffix);
+            string launchExec = isChain ? $"%PROGRAMFILES%/iiko/Chain/{version}/BackOffice.exe" : $"%PROGRAMFILES%/iiko/iikoRMS/{version}/BackOffice.exe";
+            string launchParam = $" /login={Login} /password={Password} /AdditionalTmpFolder={address}";
+            string configDir = "%APPDATA%/iiko/" + (isChain ? "Chain/" : "RMS/") + address;
+
+            MessageBox.Show($"Запуск:\n {launchExec} {launchParam}\n\nКонфиг:\n {configDir}/config/backclient.config.xml ") ;
         }
         #endregion
 
