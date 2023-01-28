@@ -25,7 +25,7 @@
           IsChain="True"
           ChainName="ООО Машина"/>
   <Server Name="Тестовый офис 5"
-        URL="http://localhost5:8080/resto"
-        Version="7.9.7"
-        ChainName="ООО Машина"/>
+          URL="http://localhost5:8080/resto"
+          Version="7.9.7"
+          ChainName="ООО Машина"/>
 </Servers>

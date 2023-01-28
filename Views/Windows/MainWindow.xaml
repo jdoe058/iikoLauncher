@@ -53,34 +53,34 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Сервер:"/>
-                <TextBlock Width="300" Text="{Binding SelectedServer.Name}"/>
+                <TextBlock Width="300" Text="{Binding SelectedItem.Attributes[Name].Value , ElementName=dataGrid }" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="URL (отл.):"/>
-                <TextBlock Width="300" Text="http://localhost:8080/resto"/>
+                <TextBlock Width="300" Text="{Binding SelectedItem.Attributes[URL].Value , ElementName=dataGrid}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Версия (отл.):"/>
-                <TextBlock Width="300" Text="8.2.6"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="3">
-                <TextBlock Width="80" Text="Вызов (отл.):"/>
-                <TextBlock TextWrapping="Wrap" Width="300" Text="C:/Program File/iiko/iikoRMS/826/BackOffice.exe -url http://localhost:8080/resto -login admin -password password"/>
+                <TextBlock Width="300" Text="{Binding SelectedItem.Attributes[Version].Value , ElementName=dataGrid}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Поиск:"/>
                 <TextBox Width="300" Text=""/>
             </StackPanel>
         </StackPanel>
-        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource cvs}}" SelectedItem="{Binding SelectedServer}" IsReadOnly="True">
+        <DataGrid AutoGenerateColumns="False" Name="dataGrid"
+                  ItemsSource="{Binding Source={StaticResource cvs}, Mode=OneWay}" 
+                  
+                  SelectedIndex="0"
+                  IsReadOnly="True">
             <DataGrid.GroupStyle>
                 <GroupStyle/>
             </DataGrid.GroupStyle>
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Header="Чейн" Binding="{Binding XPath=@IsChain}"/>
-                <DataGridTextColumn Header="Название" Binding="{Binding XPath=@Name}"/>
+                <DataGridCheckBoxColumn Header="Чейн" Binding="{Binding XPath=@IsChain}" />
+                <DataGridTextColumn Header="Название" Binding="{Binding XPath=@Name}" />
                 <DataGridTextColumn Header="Версия" Width="40" Binding="{Binding XPath=@Version}"/>
-                <DataGridTextColumn Header="URL" Binding="{Binding XPath=@URL}"/>
+                <DataGridTextColumn Header="URL" Binding="{Binding XPath=@URL}" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
