@@ -28,7 +28,7 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Файл">
-                <MenuItem Header="Выход"/>
+                <MenuItem Header="Выход" Command="{Binding CloseApplicationCommand}"/>
             </MenuItem>
             <MenuItem Header="Справка">
                 <MenuItem Header="О программе"/>
@@ -47,9 +47,9 @@
                 <PasswordBox Width="300" Password="admin"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Margin="3,0" Width="70" Content="Войти" />
-                <Button Margin="3,0" Width="70" Content="Скачать" />
-                <Button Margin="3,0" Width="70" Content="Закрыть"/>
+                <Button Margin="3,0" Width="70" Content="Войти" Command="{Binding LaunchOfficeCommand}"/>
+                <Button Margin="3,0" Width="70" Content="Скачать" Command="{Binding DownloadOfficeCommand}" />
+                <Button Margin="3,0" Width="70" Content="Закрыть" Command="{Binding CloseApplicationCommand}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Сервер:"/>

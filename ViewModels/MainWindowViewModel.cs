@@ -1,10 +1,13 @@
-﻿using iikoLauncher.Models;
+﻿using iikoLauncher.Infrastructure.Commands;
+using iikoLauncher.Models;
 using iikoLauncher.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace iikoLauncher.ViewModels
 {
@@ -52,5 +55,54 @@ namespace iikoLauncher.ViewModels
 
         #endregion
 
+        #region Команды
+
+        #region CloseApplicationCommand
+        public ICommand CloseApplicationCommand { get; }
+
+        private bool CanCloseApplicationCommandExecute(object p) => true;
+
+        private void OnCloseApplicationCommandExecuted(object p) 
+        {
+            Application.Current.Shutdown();
+        }
+
+        #endregion
+
+        #region DownloadOfficeCommand
+
+        public ICommand DownloadOfficeCommand { get; }
+
+        private bool CanDownloadOfficeCommandExecute(object p) => false;
+
+        private void OnDownloadOfficeCommandExecuted(object p) { throw new NotImplementedException(); }
+        #endregion
+
+        #region LaunchOfficeCommand
+        public ICommand LaunchOfficeCommand { get; }
+
+        private bool CanLaunchOfficeCommandExecute(object p) => false;
+
+        private void OnLaunchOfficeCommandExecuted(object p)
+        { 
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #endregion
+
+        public MainWindowViewModel()
+        {
+            #region Команды
+
+            CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
+
+            DownloadOfficeCommand = new LambdaCommand(OnDownloadOfficeCommandExecuted, CanDownloadOfficeCommandExecute);
+
+            LaunchOfficeCommand = new LambdaCommand(OnLaunchOfficeCommandExecuted, CanLaunchOfficeCommandExecute);
+
+            #endregion
+
+        }
     }
 }
