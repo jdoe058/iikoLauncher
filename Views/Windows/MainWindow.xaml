@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:iikoLauncher"
         xmlns:vm="clr-namespace:iikoLauncher.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="600" Width="400" >
+        Title="{Binding Title}" 
+        Height="600" Width="400" >
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -23,7 +24,7 @@
             </MenuItem>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem Content="Готов"/>
+            <StatusBarItem Content="{Binding Status}"/>
         </StatusBar>
         <StackPanel DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal" Margin="3">
