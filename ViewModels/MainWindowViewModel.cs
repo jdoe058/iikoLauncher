@@ -1,4 +1,5 @@
-﻿using iikoLauncher.ViewModels.Base;
+﻿using iikoLauncher.Models;
+using iikoLauncher.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,19 @@ namespace iikoLauncher.ViewModels
 
         #endregion
 
+        #region SelectedServer : Server - Выбранный сервер
+
+        /// <summary>Выбранный сервер</summary>
+        private Server _SelectedServer;
+
+        /// <summary>Выбранный сервер</summary>
+        public Server SelectedServer
+        {
+            get => _SelectedServer;
+            set => Set(ref _SelectedServer, value);
+        }
+
+        #endregion
 
     }
 }

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:local="clr-namespace:iikoLauncher"
         xmlns:vm="clr-namespace:iikoLauncher.ViewModels"
         mc:Ignorable="d"
@@ -13,6 +14,16 @@
     </Window.DataContext>
     <Window.Resources>
         <XmlDataProvider x:Key="serversProvider" Source="../../iikoLauncher.xml" XPath="Servers"/>
+        <CollectionViewSource x:Key="cvs" Source="{Binding Source={StaticResource serversProvider}, XPath=Server}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="@ChainName"/>
+                <scm:SortDescription PropertyName="@Name"/>
+            </CollectionViewSource.SortDescriptions>
+
+                    <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="@ChainName" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
     </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
@@ -42,7 +53,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Сервер:"/>
-                <TextBlock Width="300" Text="Тестовый сервер"/>
+                <TextBlock Width="300" Text="{Binding SelectedServer.Name}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="URL (отл.):"/>
@@ -61,12 +72,16 @@
                 <TextBox Width="300" Text=""/>
             </StackPanel>
         </StackPanel>
-        <TreeView ItemsSource="{Binding Source={StaticResource serversProvider}, XPath=Server}">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding XPath=Server}">
-                    <TextBlock Text="{Binding XPath=@Name}"/>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
+        <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource cvs}}" SelectedItem="{Binding SelectedServer}" IsReadOnly="True">
+            <DataGrid.GroupStyle>
+                <GroupStyle/>
+            </DataGrid.GroupStyle>
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Header="Чейн" Binding="{Binding XPath=@IsChain}"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding XPath=@Name}"/>
+                <DataGridTextColumn Header="Версия" Width="40" Binding="{Binding XPath=@Version}"/>
+                <DataGridTextColumn Header="URL" Binding="{Binding XPath=@URL}"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </DockPanel>
 </Window>
