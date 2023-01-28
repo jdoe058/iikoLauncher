@@ -53,15 +53,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Сервер:"/>
-                <TextBlock Width="300" Text="{Binding SelectedItem, ElementName=dataGrid }" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="3">
-                <TextBlock Width="80" Text="URL (отл.):"/>
-                <TextBlock Width="300" Text="{Binding SelectedItem.Attributes[URL].Value , ElementName=dataGrid}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="3">
-                <TextBlock Width="80" Text="Версия (отл.):"/>
-                <TextBlock Width="300" Text="{Binding SelectedItem.Attributes[Version].Value , ElementName=dataGrid}"/>
+                <TextBlock Width="300" Text="{Binding SelectedItem.Attributes[Name].Value, ElementName=dataGrid }" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Поиск:"/>
