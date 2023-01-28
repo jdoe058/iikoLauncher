@@ -47,13 +47,13 @@
                 <PasswordBox Width="300" Password="admin"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Margin="3,0" Width="70" Content="Войти" Command="{Binding LaunchOfficeCommand}"/>
+                <Button Margin="3,0" Width="70" Content="Войти" Command="{Binding LaunchOfficeCommand}" CommandParameter="{Binding SelectedItem.Attributes, ElementName=dataGrid }"/>
                 <Button Margin="3,0" Width="70" Content="Скачать" Command="{Binding DownloadOfficeCommand}" />
                 <Button Margin="3,0" Width="70" Content="Закрыть" Command="{Binding CloseApplicationCommand}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Сервер:"/>
-                <TextBlock Width="300" Text="{Binding SelectedItem.Attributes[Name].Value , ElementName=dataGrid }" />
+                <TextBlock Width="300" Text="{Binding SelectedItem, ElementName=dataGrid }" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="URL (отл.):"/>

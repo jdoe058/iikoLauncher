@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Xml;
 
 namespace iikoLauncher.ViewModels
 {
@@ -81,11 +83,21 @@ namespace iikoLauncher.ViewModels
         #region LaunchOfficeCommand
         public ICommand LaunchOfficeCommand { get; }
 
-        private bool CanLaunchOfficeCommandExecute(object p) => false;
+        private bool CanLaunchOfficeCommandExecute(object p) => true;
 
         private void OnLaunchOfficeCommandExecuted(object p)
-        { 
-            throw new NotImplementedException();
+        {
+            var Attr = p as XmlAttributeCollection;
+            string pattern = @"^(https?)://(\w+):?(\d*)(/resto)$";
+
+            GroupCollection gc = Regex.Match(Attr["URL"].Value, pattern).Groups;
+
+            string protocol = gc[1].Value;
+            string address = gc[2].Value;
+            string port = gc[3].Value;
+            string suffix = gc[4].Value;
+
+            MessageBox.Show(protocol + "\n" + address + "\n" + port + "\n" + suffix);
         }
         #endregion
 
