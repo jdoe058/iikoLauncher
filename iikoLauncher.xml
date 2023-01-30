@@ -7,17 +7,17 @@
           ChainName="ООО Ромашка"/>
   <Server Name="Тестовый офис 4"
           URL="http://localhost4:8080/resto"
-          Version="7.7.8"/>
+          Version="8.2.6"/>
   <Server Name="Тестовый офис 3"
           URL="http://localhost3:8080/resto"
-          Version="8.0.6"/>
+          Version="8.2.6"/>
   <Server Name="Тестовый офис 2"
           URL="http://localhost2:8080/resto"
-          Version="7.9.7"
+          Version="8.2.6"
           ChainName="ООО Ромашка"/>
   <Server Name="Тестовый офис 1"
           URL="http://localhost1:8080/resto"
-          Version="8.1.7"
+          Version="8.2.6"
           ChainName="ООО Ромашка"/>
   <Server Name="Тестовый чейн 2"
           URL="http://localhost4:9080/resto"
@@ -26,6 +26,6 @@
           ChainName="ООО Машина"/>
   <Server Name="Тестовый офис 5"
           URL="http://localhost5:8080/resto"
-          Version="7.9.7"
+          Version="8.2.6"
           ChainName="ООО Машина"/>
 </Servers>

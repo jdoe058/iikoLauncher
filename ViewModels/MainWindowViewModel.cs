@@ -3,6 +3,7 @@ using iikoLauncher.Models;
 using iikoLauncher.ViewModels.Base;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace iikoLauncher.ViewModels
 {
@@ -107,7 +109,24 @@ namespace iikoLauncher.ViewModels
         #region LaunchOfficeCommand
         public ICommand LaunchOfficeCommand { get; }
 
-        private bool CanLaunchOfficeCommandExecute(object p) => true;
+        private string isLaunchPath(bool isChain, string version) 
+        {
+            string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\Chain" : @"C:\Program files\iiko\iikoRMS", version, @"BackOffice.exe");
+            return File.Exists(launchExec) ? launchExec : "";
+        }
+
+        private bool CanLaunchOfficeCommandExecute(object p) 
+        {
+            var Attr = p as XmlAttributeCollection;
+
+            if (Attr is null) return false;
+
+            bool isChain = Equals(Attr["IsChain"]?.Value, "True");
+            string version = Attr["Version"].Value;
+
+            return !String.IsNullOrEmpty(isLaunchPath(isChain, version));
+        }
+        
 
         private void OnLaunchOfficeCommandExecuted(object p)
         {
@@ -116,7 +135,7 @@ namespace iikoLauncher.ViewModels
             bool isChain = Equals(Attr["IsChain"]?.Value,"True");
             string version = Attr["Version"].Value;
 
-            string pattern = @"^(https?)://(\w+):?(\d*)(/resto)$";
+            string pattern = @"^(https?)://([-\.\w]+):?(\d*)(/resto)$";
 
             GroupCollection gc = Regex.Match(Attr["URL"].Value, pattern).Groups;
 
@@ -125,11 +144,28 @@ namespace iikoLauncher.ViewModels
             string port = gc[3].Value;
             string suffix = gc[4].Value;
 
-            string launchExec = isChain ? $"%PROGRAMFILES%/iiko/Chain/{version}/BackOffice.exe" : $"%PROGRAMFILES%/iiko/iikoRMS/{version}/BackOffice.exe";
-            string launchParam = $" /login={Login} /password={Password} /AdditionalTmpFolder={address}";
-            string configDir = "%APPDATA%/iiko/" + (isChain ? "Chain/" : "RMS/") + address;
+            string configDir = Path.Combine(Environment.ExpandEnvironmentVariables(@"%AppData%\iiko"), isChain ? @"Chain" : @"RMS", address, @"config");
 
-            MessageBox.Show($"Запуск:\n {launchExec} {launchParam}\n\nКонфиг:\n {configDir}/config/backclient.config.xml ") ;
+            Directory.CreateDirectory(configDir);
+         
+            XDocument xdoc = new XDocument(
+                new XElement("config",
+                    new XElement("ServersList",
+                        new XElement("Protocol", protocol),
+                        new XElement("ServerAddr", address),
+                        new XElement("ServerSubUrl", suffix),
+                        new XElement("Port", port),
+                        new XElement("IsPresent", true)
+                    )
+                )
+            );
+            xdoc.Save(Path.Combine(configDir, @"backclient.config.xml"));
+                        
+
+            string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\Chain" : @"C:\Program files\iiko\iikoRMS", version, @"BackOffice.exe");
+            string launchParam = $" /login={Login} /password={Password} /AdditionalTmpFolder={address}";
+
+            System.Diagnostics.Process.Start(launchExec, launchParam);
         }
         #endregion
 
