@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:iikoLauncher"
         xmlns:vm="clr-namespace:iikoLauncher.ViewModels"
+        
         mc:Ignorable="d"
         Title="{Binding Title}" 
-        Height="600" Width="400" >
+        Height="600" Width="800" >
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -38,19 +40,7 @@
             <StatusBarItem Content="{Binding Status}"/>
         </StatusBar>
         <StackPanel DockPanel.Dock="Top">
-            <StackPanel Orientation="Horizontal" Margin="3">
-                <TextBlock Width="80" Text="Логин:"/>
-                <TextBox Width="300" Text="{Binding Login}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="3">
-                <TextBlock Width="80" Text="Пароль:"/>
-                <TextBox Width="300" Text="{Binding Password}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Margin="3,0" Width="70" Content="Войти" Command="{Binding LaunchOfficeCommand}" CommandParameter="{Binding SelectedItem.Attributes, ElementName=dataGrid }"/>
-                <Button Margin="3,0" Width="70" Content="Скачать" Command="{Binding DownloadOfficeCommand}" />
-                <Button Margin="3,0" Width="70" Content="Закрыть" Command="{Binding CloseApplicationCommand}"/>
-            </StackPanel>
+
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Сервер:"/>
                 <TextBlock Width="300" Text="{Binding SelectedItem.Attributes[Name].Value, ElementName=dataGrid }" />
@@ -71,9 +61,15 @@
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Header="Чейн" Binding="{Binding XPath=@IsChain}" />
                 <DataGridTextColumn Header="Название" Binding="{Binding XPath=@Name}" />
-                <DataGridTextColumn Header="Версия" Width="40" Binding="{Binding XPath=@Version}"/>
+                <DataGridTextColumn Header="Версия" Width="50" Binding="{Binding XPath=@Version}"/>
                 <DataGridTextColumn Header="URL" Binding="{Binding XPath=@URL}" />
             </DataGrid.Columns>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding LaunchOfficeCommand}" 
+                                           CommandParameter="{Binding SelectedItem.Attributes, ElementName=dataGrid }"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </DataGrid>
     </DockPanel>
 </Window>

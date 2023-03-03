@@ -111,7 +111,7 @@ namespace iikoLauncher.ViewModels
 
         private string isLaunchPath(bool isChain, string version) 
         {
-            string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\Chain" : @"C:\Program files\iiko\iikoRMS", version, @"BackOffice.exe");
+            string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\iikoChain" : @"C:\Program files\iiko\iikoRMS", version, @"BackOffice.exe");
             return File.Exists(launchExec) ? launchExec : "";
         }
 
@@ -141,7 +141,7 @@ namespace iikoLauncher.ViewModels
 
             string protocol = gc[1].Value;
             string address = gc[2].Value;
-            string port = gc[3].Value;
+            string port = gc[3].Value != string.Empty ? gc[3].Value : "443";
             string suffix = gc[4].Value;
 
             string configDir = Path.Combine(Environment.ExpandEnvironmentVariables(@"%AppData%\iiko"), isChain ? @"Chain" : @"RMS", address, @"config");
@@ -162,8 +162,9 @@ namespace iikoLauncher.ViewModels
             xdoc.Save(Path.Combine(configDir, @"backclient.config.xml"));
                         
 
-            string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\Chain" : @"C:\Program files\iiko\iikoRMS", version, @"BackOffice.exe");
-            string launchParam = $" /login={Login} /password={Password} /AdditionalTmpFolder={address}";
+            string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\iikoChain" : @"C:\Program files\iiko\iikoRMS", version, @"BackOffice.exe");
+            //string launchParam = $" /login={Login} /password={Password} /AdditionalTmpFolder={address}";
+            string launchParam = $"/AdditionalTmpFolder={address}";
 
             System.Diagnostics.Process.Start(launchExec, launchParam);
         }
