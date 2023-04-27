@@ -27,6 +27,9 @@
   <Server Name="Тестовый офис 5"
           URL="https://servis-komfort.iiko.it/resto"
           Version="8.3.7002"
-          ChainName="ООО Машина"/>	
-
+          ChainName="ООО Машина"
+          Address ="servis-komfort.iiko.it"
+          HTTPS = "True"
+          Login="aaa"
+          Password="aaa"/>	
 </Servers>

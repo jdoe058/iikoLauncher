@@ -135,14 +135,28 @@ namespace iikoLauncher.ViewModels
         {
             var Attr = p as XmlAttributeCollection;
 
-            bool isChain = Equals(Attr["IsChain"]?.Value,"True");
             //string version = Attr["Version"].Value;
+            string protocol = Equals(Attr["HTTPS"]?.Value, "True") ? "https" : "http";
+            string address = Attr["Address"].Value;
+            string port = Attr["Port"]?.Value;
+            string suffix = "/resto";
 
-            XmlReader reader = null;
+            string url = $"{protocol}://{address}";
+            if (!String.IsNullOrEmpty(port))
+            {
+                url += $":{port}";
+            } else
+            {
+                port = "443";
+            }
+            url += "/resto/get_server_info.jsp?encoding=UTF-8";
+
+
+            XmlReader reader;
             
             try
             {
-                reader = XmlReader.Create(Attr["URL"].Value + "/get_server_info.jsp?encoding=UTF-8");
+                reader = XmlReader.Create(url);
             }
             catch (Exception ex)
             {
@@ -158,17 +172,16 @@ namespace iikoLauncher.ViewModels
             }
 
             string s = reader.ReadElementContentAsString();
-            string version = s.Substring(0, s.Length - 2);
-            
+            //string version = s.Substring(0, s.Length - 2);
 
-            string pattern = @"^(https?)://([-\.\w]+):?(\d*)(/resto)$";
+            bool isChain = Equals(Attr["IsChain"]?.Value, "True");
+            string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\iikoChain" : @"C:\Program files\iiko\iikoRMS", s.Substring(0, s.Length - 2), @"BackOffice.exe");
 
-            GroupCollection gc = Regex.Match(Attr["URL"].Value, pattern).Groups;
-
-            string protocol = gc[1].Value;
-            string address = gc[2].Value;
-            string port = gc[3].Value != string.Empty ? gc[3].Value : "443";
-            string suffix = gc[4].Value;
+            if (!File.Exists(launchExec))
+            {
+                MessageBox.Show($"Отсутствует офис\n\n{launchExec}");
+                return;
+            }
 
             string configDir = Path.Combine(Environment.ExpandEnvironmentVariables(@"%AppData%\iiko"), isChain ? @"Chain" : @"RMS", address, @"config");
 
@@ -188,10 +201,8 @@ namespace iikoLauncher.ViewModels
             xdoc.Save(Path.Combine(configDir, @"backclient.config.xml"));
 
             
-
-            string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\iikoChain" : @"C:\Program files\iiko\iikoRMS", version, @"BackOffice.exe");
-            //string launchParam = $" /login={Login} /password={Password} /AdditionalTmpFolder={address}";
-            string launchParam = $"/AdditionalTmpFolder={address}";
+            string launchParam = $" /login={Attr["Login"]?.Value} /password={Attr["Password"]?.Value} /AdditionalTmpFolder={address}";
+            //string launchParam = $"/AdditionalTmpFolder={address}";
 
             System.Diagnostics.Process.Start(launchExec, launchParam);
         }
