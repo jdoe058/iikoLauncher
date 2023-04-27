@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using iikoLauncher.Models;
+using System.Xml;
 
 namespace iikoLauncher
 {
@@ -23,6 +25,25 @@ namespace iikoLauncher
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void CollectionViewSource_Filter(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is XmlElement server)) return;
+            
+            var filter = ServersFilter.Text;
+            if (filter.Length == 0) return;
+
+            if (server?.Attributes["Name"]?.Value.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) return;
+            if (server?.Attributes["ChainName"]?.Value.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) return;
+
+            e.Accepted = false;
+        }
+
+        private void ServersFilter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var cvs = (CollectionViewSource)Resources["cvs"];
+            cvs.View.Refresh();
         }
     }
 }

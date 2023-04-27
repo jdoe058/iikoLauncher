@@ -6,8 +6,7 @@
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:iikoLauncher"
-        xmlns:vm="clr-namespace:iikoLauncher.ViewModels"
-        
+        xmlns:vm="clr-namespace:iikoLauncher.ViewModels"        
         mc:Ignorable="d"
         Title="{Binding Title}" 
         Height="600" Width="800" >
@@ -16,7 +15,8 @@
     </Window.DataContext>
     <Window.Resources>
         <XmlDataProvider x:Key="serversProvider" Source="../../iikoLauncher.xml" XPath="Servers"/>
-        <CollectionViewSource x:Key="cvs" Source="{Binding Source={StaticResource serversProvider}, XPath=Server}">
+        
+        <CollectionViewSource x:Key="cvs" Source="{Binding Source={StaticResource serversProvider}, XPath=Server}" Filter="CollectionViewSource_Filter">
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription PropertyName="@ChainName"/>
                 <scm:SortDescription PropertyName="@Name"/>
@@ -40,15 +40,14 @@
             <StatusBarItem Content="{Binding Status}"/>
         </StatusBar>
         <StackPanel DockPanel.Dock="Top">
-
             <StackPanel Orientation="Horizontal" Margin="3">
                 <TextBlock Width="80" Text="Сервер:"/>
                 <TextBlock Width="300" Text="{Binding SelectedItem.Attributes[Name].Value, ElementName=dataGrid }" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="3">
-                <TextBlock Width="80" Text="Поиск:"/>
-                <TextBox Width="300" Text=""/>
-            </StackPanel>
+            <DockPanel Margin="3">
+                <TextBlock DockPanel.Dock="Left" Width="80" Text="Поиск:"/>
+                <TextBox Name="ServersFilter" TextChanged="ServersFilter_TextChanged"/>
+            </DockPanel>
         </StackPanel>
         <DataGrid AutoGenerateColumns="False" Name="dataGrid"
                   ItemsSource="{Binding Source={StaticResource cvs}, Mode=OneWay}" 
@@ -59,8 +58,9 @@
                 <GroupStyle/>
             </DataGrid.GroupStyle>
             <DataGrid.Columns>
+                <!--DataGridTextColumn Binding="{Binding XPath=@ChainName}"/-->
                 <DataGridCheckBoxColumn Header="Чейн" Binding="{Binding XPath=@IsChain}" />
-                <DataGridTextColumn Header="Название" Binding="{Binding XPath=@Name}" />
+                <DataGridTextColumn Header="Название" Width="*" Binding="{Binding XPath=@Name}" />
                 <DataGridTextColumn Header="Версия" Width="50" Binding="{Binding XPath=@Version}"/>
                 <DataGridTextColumn Header="URL" Binding="{Binding XPath=@URL}" />
             </DataGrid.Columns>

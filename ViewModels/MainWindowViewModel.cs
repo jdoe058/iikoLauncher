@@ -117,7 +117,10 @@ namespace iikoLauncher.ViewModels
 
         private bool CanLaunchOfficeCommandExecute(object p) 
         {
+
             var Attr = p as XmlAttributeCollection;
+
+            return !(p is null);
 
             if (Attr is null) return false;
 
@@ -133,7 +136,30 @@ namespace iikoLauncher.ViewModels
             var Attr = p as XmlAttributeCollection;
 
             bool isChain = Equals(Attr["IsChain"]?.Value,"True");
-            string version = Attr["Version"].Value;
+            //string version = Attr["Version"].Value;
+
+            XmlReader reader = null;
+            
+            try
+            {
+                reader = XmlReader.Create(Attr["URL"].Value + "/get_server_info.jsp?encoding=UTF-8");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+
+
+            if (!reader.ReadToFollowing("version"))
+            {
+                MessageBox.Show("Невозможно определить версию iiko.");
+                return;
+            }
+
+            string s = reader.ReadElementContentAsString();
+            string version = s.Substring(0, s.Length - 2);
+            
 
             string pattern = @"^(https?)://([-\.\w]+):?(\d*)(/resto)$";
 
@@ -160,7 +186,8 @@ namespace iikoLauncher.ViewModels
                 )
             );
             xdoc.Save(Path.Combine(configDir, @"backclient.config.xml"));
-                        
+
+            
 
             string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\iikoChain" : @"C:\Program files\iiko\iikoRMS", version, @"BackOffice.exe");
             //string launchParam = $" /login={Login} /password={Password} /AdditionalTmpFolder={address}";
@@ -183,7 +210,6 @@ namespace iikoLauncher.ViewModels
             LaunchOfficeCommand = new LambdaCommand(OnLaunchOfficeCommandExecuted, CanLaunchOfficeCommandExecute);
 
             #endregion
-
         }
     }
 }

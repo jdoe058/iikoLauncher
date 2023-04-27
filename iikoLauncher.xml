@@ -25,7 +25,8 @@
           IsChain="True"
           ChainName="ООО Машина"/>
   <Server Name="Тестовый офис 5"
-          URL="http://localhost5:8080/resto"
-          Version="8.2.6"
-          ChainName="ООО Машина"/>
+          URL="https://servis-komfort.iiko.it/resto"
+          Version="8.3.7002"
+          ChainName="ООО Машина"/>	
+
 </Servers>
