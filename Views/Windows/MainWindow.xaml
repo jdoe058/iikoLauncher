@@ -62,7 +62,7 @@
                 
                 <DataGridTextColumn Header="Название" Width="*" Binding="{Binding XPath=@Name}" />
                 <!--DataGridTextColumn Header="Версия" Width="50" Binding="{Binding XPath=@Version}"/-->
-                <DataGridCheckBoxColumn Header="Чейн" Binding="{Binding XPath=@IsChain}" />
+                <!--DataGridCheckBoxColumn Header="Чейн" Binding="{Binding XPath=@IsChain}" /-->
                 <DataGridCheckBoxColumn Header="HTTPS" Binding="{Binding XPath=@HTTPS}"/>
                 <DataGridTextColumn Header="Адрес" Binding="{Binding XPath=@Address}"/>
                 <DataGridTextColumn Header="Порт" Binding="{Binding XPath=@Port}"/>

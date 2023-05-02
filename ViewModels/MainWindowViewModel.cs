@@ -109,27 +109,12 @@ namespace iikoLauncher.ViewModels
         #region LaunchOfficeCommand
         public ICommand LaunchOfficeCommand { get; }
 
-        private string isLaunchPath(bool isChain, string version) 
-        {
-            string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\iikoChain" : @"C:\Program files\iiko\iikoRMS", version, @"BackOffice.exe");
-            return File.Exists(launchExec) ? launchExec : "";
-        }
-
         private bool CanLaunchOfficeCommandExecute(object p) 
         {
-
-            var Attr = p as XmlAttributeCollection;
+            XmlAttributeCollection Attr = p as XmlAttributeCollection;
 
             return !(p is null);
-
-            if (Attr is null) return false;
-
-            bool isChain = Equals(Attr["IsChain"]?.Value, "True");
-            string version = Attr["Version"].Value;
-
-            return !String.IsNullOrEmpty(isLaunchPath(isChain, version));
         }
-        
 
         private void OnLaunchOfficeCommandExecuted(object p)
         {
@@ -149,14 +134,12 @@ namespace iikoLauncher.ViewModels
             {
                 port = "443";
             }
-            url += "/resto/get_server_info.jsp?encoding=UTF-8";
-
 
             XmlReader reader;
-            
+
             try
             {
-                reader = XmlReader.Create(url);
+                reader = XmlReader.Create(url + "/resto/get_server_info.jsp?encoding=UTF-8");
             }
             catch (Exception ex)
             {
@@ -164,17 +147,10 @@ namespace iikoLauncher.ViewModels
                 return;
             }
 
+            XElement xml = XDocument.Load(reader).Element("r");
+            string s = xml.Element("version")?.Value;
+            bool isChain = Equals(xml.Element("edition")?.Value, "chain");
 
-            if (!reader.ReadToFollowing("version"))
-            {
-                MessageBox.Show("Невозможно определить версию iiko.");
-                return;
-            }
-
-            string s = reader.ReadElementContentAsString();
-            //string version = s.Substring(0, s.Length - 2);
-
-            bool isChain = Equals(Attr["IsChain"]?.Value, "True");
             string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\iikoChain" : @"C:\Program files\iiko\iikoRMS", s.Substring(0, s.Length - 2), @"BackOffice.exe");
 
             if (!File.Exists(launchExec))
