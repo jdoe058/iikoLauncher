@@ -35,7 +35,7 @@ namespace iikoLauncher
             if (filter.Length == 0) return;
 
             if (server?.Attributes["Name"]?.Value.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) return;
-            if (server?.Attributes["ChainName"]?.Value.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) return;
+            if (server?.Attributes["ClientName"]?.Value.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) return;
 
             e.Accepted = false;
         }
