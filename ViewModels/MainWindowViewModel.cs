@@ -169,7 +169,10 @@ namespace iikoLauncher.ViewModels
 
             XmlSerializer serializer = new XmlSerializer(typeof(Servers));
 
-            StreamReader reader = new StreamReader(@"C:\Users\User\Desktop\iikoLauncher.xml");
+            //string file = Path.Combine();
+
+            //
+            StreamReader reader = new StreamReader(Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\Desktop\iikoLauncher.xml"));
             Servers s = (Servers)serializer.Deserialize(reader);
             ServerList = new ObservableCollection<Server>(s.Server);
             reader.Close();
