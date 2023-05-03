@@ -3,7 +3,7 @@
   <Server Name="Тестовый чейн"
           URL="http://localhost:9080/resto"
           Version="8.2.6"
-          IsChain="True"
+          IsChain="true"
           ClientName="ООО Ромашка"/>
   <Server Name="Тестовый офис 4"
           URL="http://localhost4:8080/resto"
@@ -22,14 +22,14 @@
   <Server Name="Тестовый чейн 2"
           URL="http://localhost4:9080/resto"
           Version="8.1.7"
-          IsChain="True"
+          IsChain="true"
           ClientName="ООО Машина"/>
   <Server Name="Тестовый офис 5"
           URL="https://servis-komfort.iiko.it/resto"
           Version="8.3.7002"
           ClientName="ООО Машина"
           Address ="servis-komfort.iiko.it"
-          HTTPS = "True"
+          HTTPS = "true"
           Login="aaa"
           Password="aaa"/>	
 </Servers>

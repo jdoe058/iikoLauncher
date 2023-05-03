@@ -29,21 +29,27 @@ namespace iikoLauncher
 
         private void CollectionViewSource_Filter(object sender, FilterEventArgs e)
         {
-            if (!(e.Item is XmlElement server)) return;
+            if (!(e.Item is Server server)) return;
             
             var filter = ServersFilter.Text;
             if (filter.Length == 0) return;
 
-            if (server?.Attributes["Name"]?.Value.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) return;
-            if (server?.Attributes["ClientName"]?.Value.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) return;
+            if (server?.Name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) return;
+            if (server?.ClientName?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) return;
 
             e.Accepted = false;
         }
 
         private void ServersFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var cvs = (CollectionViewSource)Resources["cvs"];
+            CollectionViewSource cvs = (CollectionViewSource)Resources["cvs"];
             cvs.View.Refresh();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //XmlDataProvider xml = (XmlDataProvider)Resources["serversProvider"];
+            //xml.Refresh();
         }
     }
 }

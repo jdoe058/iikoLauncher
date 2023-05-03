@@ -6,7 +6,8 @@
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:iikoLauncher"
-        xmlns:vm="clr-namespace:iikoLauncher.ViewModels"        
+        xmlns:vm="clr-namespace:iikoLauncher.ViewModels" 
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="{Binding Title}" 
         Height="600" Width="800" >
@@ -14,61 +15,60 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <XmlDataProvider x:Key="serversProvider" Source="../../iikoLauncher.xml" XPath="Servers"/>
-        
-        <CollectionViewSource x:Key="cvs" Source="{Binding Source={StaticResource serversProvider}, XPath=Server}" Filter="CollectionViewSource_Filter">
+        <CollectionViewSource x:Key="cvs" Source="{Binding ServerList}" Filter="CollectionViewSource_Filter">
             <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="@ClientName"/>
-                <scm:SortDescription PropertyName="@Name"/>
+                <scm:SortDescription PropertyName="ClientName"/>
+                <scm:SortDescription PropertyName="Name"/>
             </CollectionViewSource.SortDescriptions>
-
-                    <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription PropertyName="@ClientName" />
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="ClientName" />
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
     </Window.Resources>
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Файл">
-                <MenuItem Header="Выход" Command="{Binding CloseApplicationCommand}"/>
-            </MenuItem>
-            <MenuItem Header="Справка">
-                <MenuItem Header="О программе"/>
-            </MenuItem>
-        </Menu>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem Content="{Binding Status}"/>
         </StatusBar>
-        <StackPanel DockPanel.Dock="Top">
-            <StackPanel Orientation="Horizontal" Margin="3">
-                <TextBlock Width="80" Text="Сервер:"/>
-                <TextBlock Width="300" Text="{Binding SelectedItem.Attributes[Name].Value, ElementName=dataGrid }" />
-            </StackPanel>
-            <DockPanel Margin="3">
-                <TextBlock DockPanel.Dock="Left" Width="80" Text="Поиск:"/>
-                <TextBox Name="ServersFilter" TextChanged="ServersFilter_TextChanged"/>
-            </DockPanel>
-        </StackPanel>
+
+        <DockPanel Margin="6" DockPanel.Dock="Top">
+            <Button DockPanel.Dock="Right">
+                <Button.Content>
+                    <fa:ImageAwesome Icon="Ban"  Height="14"/>
+                </Button.Content>
+            </Button>
+            <Button>
+                <Button.Content>
+                    <fa:ImageAwesome Icon="Refresh" Height="14"/>
+                </Button.Content>
+            </Button>
+            <Button Margin="3,0">
+                <Button.Content>
+                    <fa:ImageAwesome Icon="Save" Height="14"/>
+                </Button.Content>
+            </Button>
+            <fa:ImageAwesome Icon="Search" Height="14" Margin="0,3"/>
+            <TextBox Name="ServersFilter" Margin="3,0" TextChanged="ServersFilter_TextChanged"/>
+        </DockPanel>
+        
         <DataGrid AutoGenerateColumns="False" Name="dataGrid"
                   ItemsSource="{Binding Source={StaticResource cvs}, Mode=OneWay}" 
-                  
                   SelectedIndex="0"
                   IsReadOnly="True">
             <DataGrid.GroupStyle>
                 <GroupStyle/>
             </DataGrid.GroupStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Название" Width="*" Binding="{Binding XPath=@Name}" />
-                <DataGridCheckBoxColumn Header="HTTPS" Binding="{Binding XPath=@HTTPS}"/>
-                <DataGridTextColumn Header="Адрес" Binding="{Binding XPath=@Address}"/>
-                <DataGridTextColumn Header="Порт" Binding="{Binding XPath=@Port}"/>
-                <DataGridTextColumn Header="Логин" Binding="{Binding XPath=@Login}"/>
-                <DataGridTextColumn Header="Пароль" Binding="{Binding XPath=@Password}"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                <DataGridCheckBoxColumn Header="HTTPS" Binding="{Binding HTTPS}"/>
+                <DataGridTextColumn Header="Адрес" Binding="{Binding Address}"/>
+                <DataGridTextColumn Header="Порт" Binding="{Binding Port}"/>
+                <DataGridTextColumn Header="Логин" Binding="{Binding Login}"/>
+                <DataGridTextColumn Header="Пароль" Binding="{Binding Password}"/>
             </DataGrid.Columns>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding LaunchOfficeCommand}" 
-                                           CommandParameter="{Binding SelectedItem.Attributes, ElementName=dataGrid }"/>
+                                           CommandParameter="{Binding SelectedItem, ElementName=dataGrid }"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </DataGrid>

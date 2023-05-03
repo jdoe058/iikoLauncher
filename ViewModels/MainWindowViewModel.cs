@@ -3,6 +3,7 @@ using iikoLauncher.Models;
 using iikoLauncher.ViewModels.Base;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace iikoLauncher.ViewModels
 {
@@ -45,43 +47,15 @@ namespace iikoLauncher.ViewModels
 
         #endregion
 
-        #region SelectedServer : Server - Выбранный сервер
 
-        /// <summary>Выбранный сервер</summary>
-        private Server _SelectedServer;
+        private ObservableCollection<Server> _Servers;
 
-        /// <summary>Выбранный сервер</summary>
-        public Server SelectedServer
+        public ObservableCollection<Server> ServerList
         {
-            get => _SelectedServer;
-            set => Set(ref _SelectedServer, value);
+            get { return _Servers; }
+            set { _Servers = value; }
         }
 
-        #endregion
-
-        #region Login : string - Логин
-        /// <summary>Логин</summary>
-        private string _Login = "admin";
-
-        /// <summary>Логин</summary>
-        public string Login
-        {
-            get => _Login;
-            set => Set(ref _Login, value);
-        }
-        #endregion
-
-        #region Password : string - Пароль
-        /// <summary>Пароль</summary>
-        private string _Password = "password";
-
-        /// <summary>Пароль</summary>
-        public string Password
-        {
-            get => _Password;
-            set => Set(ref _Password, value);
-        }
-        #endregion
 
         #region Команды
 
@@ -109,25 +83,20 @@ namespace iikoLauncher.ViewModels
         #region LaunchOfficeCommand
         public ICommand LaunchOfficeCommand { get; }
 
-        private bool CanLaunchOfficeCommandExecute(object p) 
-        {
-            XmlAttributeCollection Attr = p as XmlAttributeCollection;
-
-            return !(p is null);
-        }
+        private bool CanLaunchOfficeCommandExecute(object p) => true;
 
         private void OnLaunchOfficeCommandExecuted(object p)
         {
-            var Attr = p as XmlAttributeCollection;
+            Server server = p as Server;
 
             //string version = Attr["Version"].Value;
-            string protocol = Equals(Attr["HTTPS"]?.Value, "True") ? "https" : "http";
-            string address = Attr["Address"].Value;
-            string port = Attr["Port"]?.Value;
+            string protocol = server.HTTPS ? "https" : "http";
+            string address = server.Address;
+            string port = server.Port;
             string suffix = "/resto";
 
             string url = $"{protocol}://{address}";
-            if (!String.IsNullOrEmpty(port))
+            if (!string.IsNullOrEmpty(port))
             {
                 url += $":{port}";
             } else
@@ -177,7 +146,7 @@ namespace iikoLauncher.ViewModels
             xdoc.Save(Path.Combine(configDir, @"backclient.config.xml"));
 
             
-            string launchParam = $" /login={Attr["Login"]?.Value} /password={Attr["Password"]?.Value} /AdditionalTmpFolder={address}";
+            string launchParam = $" /login={server.Login} /password={server.Password} /AdditionalTmpFolder={address}";
             //string launchParam = $"/AdditionalTmpFolder={address}";
 
             System.Diagnostics.Process.Start(launchExec, launchParam);
@@ -197,6 +166,13 @@ namespace iikoLauncher.ViewModels
             LaunchOfficeCommand = new LambdaCommand(OnLaunchOfficeCommandExecuted, CanLaunchOfficeCommandExecute);
 
             #endregion
+
+            XmlSerializer serializer = new XmlSerializer(typeof(Servers));
+
+            StreamReader reader = new StreamReader(@"C:\Users\User\Desktop\iikoLauncher.xml");
+            Servers s = (Servers)serializer.Deserialize(reader);
+            ServerList = new ObservableCollection<Server>(s.Server);
+            reader.Close();
         }
     }
 }
