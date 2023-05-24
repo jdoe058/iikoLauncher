@@ -90,9 +90,10 @@ namespace iikoLauncher.ViewModels
             Server server = p as Server;
 
             //string version = Attr["Version"].Value;
-            string protocol = server.HTTPS ? "https" : "http";
+            
             string address = server.Address;
             string port = server.Port;
+            string protocol = string.IsNullOrEmpty(port) ? "https" : "http";
             string suffix = "/resto";
 
             string url = $"{protocol}://{address}";
@@ -128,7 +129,7 @@ namespace iikoLauncher.ViewModels
                 return;
             }
 
-            string configDir = Path.Combine(Environment.ExpandEnvironmentVariables(@"%AppData%\iiko"), isChain ? @"Chain" : @"RMS", address, @"config");
+            string configDir = Path.Combine(Environment.ExpandEnvironmentVariables(@"%AppData%\iiko\"), isChain ? "Chain" : "RMS", address, "config");
 
             Directory.CreateDirectory(configDir);
          
@@ -139,14 +140,15 @@ namespace iikoLauncher.ViewModels
                         new XElement("ServerAddr", address),
                         new XElement("ServerSubUrl", suffix),
                         new XElement("Port", port),
-                        new XElement("IsPresent", true)
-                    )
+                        new XElement("IsPresent", false)
+                    ),
+                    new XElement("Login", server.Login)
                 )
             );
             xdoc.Save(Path.Combine(configDir, @"backclient.config.xml"));
 
             
-            string launchParam = $" /login={server.Login} /password={server.Password} /AdditionalTmpFolder={address}";
+            string launchParam = $"/password={server.Password} /AdditionalTmpFolder={address}";
             //string launchParam = $"/AdditionalTmpFolder={address}";
 
             System.Diagnostics.Process.Start(launchExec, launchParam);

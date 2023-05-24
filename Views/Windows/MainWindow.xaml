@@ -59,7 +59,6 @@
             </DataGrid.GroupStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
-                <DataGridCheckBoxColumn Header="HTTPS" Binding="{Binding HTTPS}"/>
                 <DataGridTextColumn Header="Адрес" Binding="{Binding Address}"/>
                 <DataGridTextColumn Header="Порт" Binding="{Binding Port}"/>
                 <DataGridTextColumn Header="Логин" Binding="{Binding Login}"/>
