@@ -4,6 +4,7 @@ using iikoLauncher.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -47,14 +48,7 @@ namespace iikoLauncher.ViewModels
 
         #endregion
 
-
-        private ObservableCollection<Server> _Servers;
-
-        public ObservableCollection<Server> ServerList
-        {
-            get { return _Servers; }
-            set { _Servers = value; }
-        }
+        public ObservableCollection<Server> ServerList { get; set; }
 
 
         #region Команды
@@ -82,99 +76,100 @@ namespace iikoLauncher.ViewModels
 
         #region LaunchOfficeCommand
         public ICommand LaunchOfficeCommand { get; }
-
         private bool CanLaunchOfficeCommandExecute(object p) => true;
 
         private void OnLaunchOfficeCommandExecuted(object p)
         {
             Server server = p as Server;
 
-            //string version = Attr["Version"].Value;
-            
             string address = server.Address;
-            string port = server.Port;
-            string protocol = string.IsNullOrEmpty(port) ? "https" : "http";
-            string suffix = "/resto";
 
-            string url = $"{protocol}://{address}";
-            if (!string.IsNullOrEmpty(port))
+            if (string.IsNullOrWhiteSpace(address))
             {
-                url += $":{port}";
-            } else
+                using (Process proc = new Process())
+                {
+                    proc.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%ProgramFiles(x86)%\AnyDesk\AnyDesk.exe");
+                    proc.StartInfo.Arguments = $"{server.Login} --with-password";
+                    proc.StartInfo.UseShellExecute = false;
+                    proc.StartInfo.RedirectStandardInput = true;
+                    proc.Start();
+                    proc.StandardInput.WriteLine(server.Password);
+                }
+                return;
+            }
+
+            string port = server.Port;
+            string protocol = "http";
+            string server_info_url = protocol;
+
+            if (string.IsNullOrEmpty(port))
             {
                 port = "443";
+                protocol += "s";
+                server_info_url += $"s://{address}";
+            }
+            else
+            {
+                server_info_url += $"://{address}:{port}";
             }
 
             XmlReader reader;
 
             try
             {
-                reader = XmlReader.Create(url + "/resto/get_server_info.jsp?encoding=UTF-8");
+                reader = XmlReader.Create(server_info_url + "/resto/get_server_info.jsp?encoding=UTF-8");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _ = MessageBox.Show(ex.Message);
                 return;
             }
 
             XElement xml = XDocument.Load(reader).Element("r");
+
             string s = xml.Element("version")?.Value;
             bool isChain = Equals(xml.Element("edition")?.Value, "chain");
-
-            string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\iikoChain" : @"C:\Program files\iiko\iikoRMS", s.Substring(0, s.Length - 2), @"BackOffice.exe");
+            string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\iikoChain" : @"C:\Program files\iiko\iikoRMS",
+                s.Substring(0, s.Length - 2), @"BackOffice.exe");
 
             if (!File.Exists(launchExec))
             {
-                MessageBox.Show($"Отсутствует офис\n\n{launchExec}");
+                _ = MessageBox.Show($"Отсутствует офис\n\n{launchExec}");
                 return;
             }
 
-            string configDir = Path.Combine(Environment.ExpandEnvironmentVariables(@"%AppData%\iiko\"), isChain ? "Chain" : "RMS", address, "config");
-
-            Directory.CreateDirectory(configDir);
-         
-            XDocument xdoc = new XDocument(
+            DirectoryInfo di = Directory.CreateDirectory(Path.Combine(
+                Environment.ExpandEnvironmentVariables(@"%AppData%\iiko"), isChain ? "Chain" : "RMS", address, "config"));
+            new XDocument(
                 new XElement("config",
                     new XElement("ServersList",
                         new XElement("Protocol", protocol),
                         new XElement("ServerAddr", address),
-                        new XElement("ServerSubUrl", suffix),
+                        new XElement("ServerSubUrl", "/resto"),
                         new XElement("Port", port),
                         new XElement("IsPresent", false)
                     ),
                     new XElement("Login", server.Login)
                 )
-            );
-            xdoc.Save(Path.Combine(configDir, @"backclient.config.xml"));
+            ).Save(Path.Combine(di.FullName, @"backclient.config.xml"));
 
-            
-            string launchParam = $"/password={server.Password} /AdditionalTmpFolder={address}";
-            //string launchParam = $"/AdditionalTmpFolder={address}";
-
-            System.Diagnostics.Process.Start(launchExec, launchParam);
+            _ = System.Diagnostics.Process.Start(launchExec, $"/password={server.Password} /AdditionalTmpFolder={address}");
         }
-        #endregion
 
         #endregion
 
+        #endregion
         public MainWindowViewModel()
         {
             #region Команды
-
             CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
-
             DownloadOfficeCommand = new LambdaCommand(OnDownloadOfficeCommandExecuted, CanDownloadOfficeCommandExecute);
-
             LaunchOfficeCommand = new LambdaCommand(OnLaunchOfficeCommandExecuted, CanLaunchOfficeCommandExecute);
-
             #endregion
 
             XmlSerializer serializer = new XmlSerializer(typeof(Servers));
 
-            //string file = Path.Combine();
-
-            //
-            StreamReader reader = new StreamReader(Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\Desktop\iikoLauncher.xml"));
+            StreamReader reader = new StreamReader(Environment.ExpandEnvironmentVariables(Properties.Settings.Default.ConnectionListPath));
             Servers s = (Servers)serializer.Deserialize(reader);
             ServerList = new ObservableCollection<Server>(s.Server);
             reader.Close();

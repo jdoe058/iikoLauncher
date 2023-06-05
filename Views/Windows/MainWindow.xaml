@@ -62,8 +62,7 @@
                 <DataGridTextColumn Header="Адрес" Binding="{Binding Address}"/>
                 <DataGridTextColumn Header="Порт" Binding="{Binding Port}"/>
                 <DataGridTextColumn Header="Логин" Binding="{Binding Login}"/>
-                <DataGridTextColumn Header="Пароль" Binding="{Binding Password}"/>
-            </DataGrid.Columns>
+             </DataGrid.Columns>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding LaunchOfficeCommand}" 
@@ -71,5 +70,6 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </DataGrid>
+
     </DockPanel>
 </Window>

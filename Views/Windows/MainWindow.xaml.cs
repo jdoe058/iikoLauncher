@@ -29,13 +29,13 @@ namespace iikoLauncher
 
         private void CollectionViewSource_Filter(object sender, FilterEventArgs e)
         {
-            if (!(e.Item is Server server)) return;
-            
-            var filter = ServersFilter.Text;
-            if (filter.Length == 0) return;
+            if (!(e.Item is Server server)) { return; }
 
-            if (server?.Name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) return;
-            if (server?.ClientName?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) return;
+            string filter = ServersFilter.Text;
+            if (filter.Length == 0) { return; }
+
+            if (server?.Name?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) { return; }
+            if (server?.ClientName?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) { return; }
 
             e.Accepted = false;
         }

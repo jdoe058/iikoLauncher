@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iikoLauncher", "iikoLauncher.csproj", "{3204E7FD-3399-413A-A69C-91D9423C76E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "connectionsToPOS", "..\connectionsToPOS\connectionsToPOS.csproj", "{5A6C250F-FEE2-433A-871E-178B403DB97A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tbConn", "..\tbConn\tbConn.csproj", "{8286D37D-CB7A-47FA-B247-98A5288D991B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{3204E7FD-3399-413A-A69C-91D9423C76E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3204E7FD-3399-413A-A69C-91D9423C76E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3204E7FD-3399-413A-A69C-91D9423C76E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A6C250F-FEE2-433A-871E-178B403DB97A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A6C250F-FEE2-433A-871E-178B403DB97A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A6C250F-FEE2-433A-871E-178B403DB97A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A6C250F-FEE2-433A-871E-178B403DB97A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8286D37D-CB7A-47FA-B247-98A5288D991B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8286D37D-CB7A-47FA-B247-98A5288D991B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8286D37D-CB7A-47FA-B247-98A5288D991B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8286D37D-CB7A-47FA-B247-98A5288D991B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
