@@ -3,7 +3,25 @@
   <Profiles />
   <Settings>
     <Setting Name="ConnectionListPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">%USERPROFILE%\Desktop\iikoLauncher.xml</Value>
+      <Value Profile="(Default)">G:\Мой Диск\iikoLauncher\iikoLauncher.xml</Value>
+    </Setting>
+    <Setting Name="IikoLogin" Type="System.String" Scope="User">
+      <Value Profile="(Default)">admin</Value>
+    </Setting>
+    <Setting Name="IikoPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">resto#test</Value>
+    </Setting>
+    <Setting Name="AnyDeskPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">password</Value>
+    </Setting>
+    <Setting Name="AnyDeskPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%ProgramFiles(x86)%\AnyDesk\AnyDesk.exe</Value>
+    </Setting>
+    <Setting Name="IikoRMSPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%ProgramW6432%\iiko\iikoRMS</Value>
+    </Setting>
+    <Setting Name="IikoChainPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%ProgramW6432%\iiko\iikoChain</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -25,13 +25,85 @@ namespace iikoLauncher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("%USERPROFILE%\\Desktop\\iikoLauncher.xml")]
+        [global::System.Configuration.DefaultSettingValueAttribute("G:\\Мой Диск\\iikoLauncher\\iikoLauncher.xml")]
         public string ConnectionListPath {
             get {
                 return ((string)(this["ConnectionListPath"]));
             }
             set {
                 this["ConnectionListPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("admin")]
+        public string IikoLogin {
+            get {
+                return ((string)(this["IikoLogin"]));
+            }
+            set {
+                this["IikoLogin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("resto#test")]
+        public string IikoPassword {
+            get {
+                return ((string)(this["IikoPassword"]));
+            }
+            set {
+                this["IikoPassword"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("password")]
+        public string AnyDeskPassword {
+            get {
+                return ((string)(this["AnyDeskPassword"]));
+            }
+            set {
+                this["AnyDeskPassword"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("%ProgramFiles(x86)%\\AnyDesk\\AnyDesk.exe")]
+        public string AnyDeskPath {
+            get {
+                return ((string)(this["AnyDeskPath"]));
+            }
+            set {
+                this["AnyDeskPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("%ProgramW6432%\\iiko\\iikoRMS")]
+        public string IikoRMSPath {
+            get {
+                return ((string)(this["IikoRMSPath"]));
+            }
+            set {
+                this["IikoRMSPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("%ProgramW6432%\\iiko\\iikoChain")]
+        public string IikoChainPath {
+            get {
+                return ((string)(this["IikoChainPath"]));
+            }
+            set {
+                this["IikoChainPath"] = value;
             }
         }
     }

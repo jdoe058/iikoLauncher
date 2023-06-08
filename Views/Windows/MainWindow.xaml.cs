@@ -48,8 +48,6 @@ namespace iikoLauncher
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //XmlDataProvider xml = (XmlDataProvider)Resources["serversProvider"];
-            //xml.Refresh();
         }
     }
 }

@@ -77,7 +77,6 @@ namespace iikoLauncher.ViewModels
         #region LaunchOfficeCommand
         public ICommand LaunchOfficeCommand { get; }
         private bool CanLaunchOfficeCommandExecute(object p) => true;
-
         private void OnLaunchOfficeCommandExecuted(object p)
         {
             Server server = p as Server;
@@ -88,12 +87,14 @@ namespace iikoLauncher.ViewModels
             {
                 using (Process proc = new Process())
                 {
-                    proc.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%ProgramFiles(x86)%\AnyDesk\AnyDesk.exe");
+                    proc.StartInfo.FileName = Environment.ExpandEnvironmentVariables(Properties.Settings.Default.AnyDeskPath);
                     proc.StartInfo.Arguments = $"{server.Login} --with-password";
                     proc.StartInfo.UseShellExecute = false;
                     proc.StartInfo.RedirectStandardInput = true;
-                    proc.Start();
-                    proc.StandardInput.WriteLine(server.Password);
+                    _ = proc.Start();
+                    proc.StandardInput.WriteLine(string.IsNullOrWhiteSpace(server.Password)
+                        ? Properties.Settings.Default.AnyDeskPassword
+                        : server.Password);
                 }
                 return;
             }
@@ -127,10 +128,12 @@ namespace iikoLauncher.ViewModels
 
             XElement xml = XDocument.Load(reader).Element("r");
 
-            string s = xml.Element("version")?.Value;
+            string fullVersion = xml.Element("version")?.Value;
             bool isChain = Equals(xml.Element("edition")?.Value, "chain");
-            string launchExec = Path.Combine(isChain ? @"C:\Program files\iiko\iikoChain" : @"C:\Program files\iiko\iikoRMS",
-                s.Substring(0, s.Length - 2), @"BackOffice.exe");
+            string launchExec = Path.Combine(Environment.ExpandEnvironmentVariables(isChain 
+                ? Properties.Settings.Default.IikoChainPath
+                : Properties.Settings.Default.IikoRMSPath),
+                fullVersion.Substring(0, fullVersion.Length - 2), @"BackOffice.exe");
 
             if (!File.Exists(launchExec))
             {
@@ -149,13 +152,14 @@ namespace iikoLauncher.ViewModels
                         new XElement("Port", port),
                         new XElement("IsPresent", false)
                     ),
-                    new XElement("Login", server.Login)
+                    new XElement("Login", string.IsNullOrWhiteSpace(server.Login)
+                        ? Properties.Settings.Default.IikoLogin
+                        : server.Login)
                 )
             ).Save(Path.Combine(di.FullName, @"backclient.config.xml"));
 
-            _ = System.Diagnostics.Process.Start(launchExec, $"/password={server.Password} /AdditionalTmpFolder={address}");
+            _ = Process.Start(launchExec, $"/password={(string.IsNullOrWhiteSpace(server.Password)?Properties.Settings.Default.IikoPassword: server.Password) } /AdditionalTmpFolder={address}");
         }
-
         #endregion
 
         #endregion
