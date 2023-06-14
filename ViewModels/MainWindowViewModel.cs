@@ -135,14 +135,25 @@ namespace iikoLauncher.ViewModels
                 : Properties.Settings.Default.IikoRMSPath),
                 fullVersion.Substring(0, fullVersion.Length - 2), @"BackOffice.exe");
 
+            string type = isChain ? "Chain" : "RMS";
+
             if (!File.Exists(launchExec))
             {
-                _ = MessageBox.Show($"Отсутствует офис\n\n{launchExec}");
+                if (MessageBox.Show($"Скачать установщик офиса версии {fullVersion}",
+                    "Отсутствует офис",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question
+                    ) == MessageBoxResult.Yes)
+                {
+                    _ = Process.Start(@".\curl", "-u partners:partners#iiko " 
+                        + Environment.ExpandEnvironmentVariables($"-o %USERPROFILE%\\Downloads\\{fullVersion}.Setup.{type}.BackOffice.exe") 
+                        + $"ftp://ftp.iiko.ru/release_iiko/{fullVersion}/Setup/Offline/Setup.{type}.BackOffice.exe");
+                }
                 return;
             }
 
             DirectoryInfo di = Directory.CreateDirectory(Path.Combine(
-                Environment.ExpandEnvironmentVariables(@"%AppData%\iiko"), isChain ? "Chain" : "RMS", address, "config"));
+                Environment.ExpandEnvironmentVariables(@"%AppData%\iiko"), type, address, "config"));
             new XDocument(
                 new XElement("config",
                     new XElement("ServersList",
@@ -173,21 +184,43 @@ namespace iikoLauncher.ViewModels
 
             XmlSerializer serializer = new XmlSerializer(typeof(Servers));
 
-            StreamReader reader = new StreamReader(Environment.ExpandEnvironmentVariables(Properties.Settings.Default.ConnectionListPath));
-            Servers s = (Servers)serializer.Deserialize(reader);
-            ServerList = new ObservableCollection<Server>(s.Server);
-            reader.Close();
+            try
+            {
+                using (StreamReader reader = new StreamReader(
+                    Environment.ExpandEnvironmentVariables(Properties.Settings.Default.ConnectionListPath)))
+                {
+
+                    Servers s = (Servers)serializer.Deserialize(reader);
+                    ServerList = new ObservableCollection<Server>(s.Server);
+                }
+            }
+            catch (Exception ex)
+            {
+                _ = MessageBox.Show($"Нет доступа к файлу настроек.\n\n{ex}");
+                return;
+            }
+
+
 
             string headerLine = string.Join(";", ServerList[0].GetType().GetProperties().Select(p => p.Name));
-            var dataLines = from conn in ServerList
+            IEnumerable<string> dataLines = from conn in ServerList
                             let dataLine = string.Join(";", conn.GetType().GetProperties().Select(p => p.GetValue(conn)))
                             select dataLine;
-            var csvData = new List<string>
+            List<string> csvData = new List<string>
             {
                 headerLine
             };
             csvData.AddRange(dataLines);
-            System.IO.File.WriteAllLines(@".\iikoLauncher.csv", csvData); 
+
+            try
+            {
+                File.WriteAllLines(@".\iikoLauncher.csv", csvData);
+            }
+            catch (Exception ex)
+            {
+                _ = MessageBox.Show($"Нет доступа к итоговому файлу.\nВозможно он открыт в Excel'е.\n\n{ex}");
+                return;
+            }
         }
     }
 }
