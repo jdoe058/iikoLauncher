@@ -25,6 +25,7 @@ namespace iikoLauncher
         public MainWindow()
         {
             InitializeComponent();
+            _ = ServersFilter.Focus();
         }
 
         private void CollectionViewSource_Filter(object sender, FilterEventArgs e)
@@ -48,6 +49,8 @@ namespace iikoLauncher
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            _ = ServersFilter.Focus();
+            ServersFilter.Text = "";
         }
     }
 }

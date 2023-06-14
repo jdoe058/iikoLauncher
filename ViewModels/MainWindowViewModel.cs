@@ -177,6 +177,17 @@ namespace iikoLauncher.ViewModels
             Servers s = (Servers)serializer.Deserialize(reader);
             ServerList = new ObservableCollection<Server>(s.Server);
             reader.Close();
+
+            string headerLine = string.Join(";", ServerList[0].GetType().GetProperties().Select(p => p.Name));
+            var dataLines = from conn in ServerList
+                            let dataLine = string.Join(";", conn.GetType().GetProperties().Select(p => p.GetValue(conn)))
+                            select dataLine;
+            var csvData = new List<string>
+            {
+                headerLine
+            };
+            csvData.AddRange(dataLines);
+            System.IO.File.WriteAllLines(@".\iikoLauncher.csv", csvData); 
         }
     }
 }

@@ -31,7 +31,7 @@
         </StatusBar>
 
         <DockPanel Margin="6" DockPanel.Dock="Top">
-            <Button DockPanel.Dock="Right">
+            <Button DockPanel.Dock="Right" Click="Button_Click">
                 <Button.Content>
                     <fa:ImageAwesome Icon="Ban"  Height="14"/>
                 </Button.Content>

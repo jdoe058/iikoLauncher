@@ -11,13 +11,16 @@ namespace iikoLauncher.Models
     public class Server
     {
         [XmlAttribute]
-        public string Name { get; set; }
-
-        [XmlAttribute]
         public string ClientName { get; set; }
 
         [XmlAttribute]
-        public bool HTTPS { get; set; }
+        public string Name { get; set; }
+
+        [XmlAttribute]
+        public string Login { get; set; }
+
+        [XmlAttribute]
+        public string Password { get; set; }
 
         [XmlAttribute]
         public string Address { get; set; }
@@ -25,11 +28,7 @@ namespace iikoLauncher.Models
         [XmlAttribute]
         public string Port { get; set; }
 
-        [XmlAttribute]
-        public string Login { get; set; }
 
-        [XmlAttribute]
-        public string Password { get; set; }
     }
 
     [Serializable()]
