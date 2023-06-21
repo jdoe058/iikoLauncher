@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using iikoLauncher.Models;
 using System.Xml;
+using iikoLauncher.ViewModels;
 
 namespace iikoLauncher
 {
@@ -26,31 +27,6 @@ namespace iikoLauncher
         {
             InitializeComponent();
             _ = ServersFilter.Focus();
-        }
-
-        private void CollectionViewSource_Filter(object sender, FilterEventArgs e)
-        {
-            if (!(e.Item is Server server)) { return; }
-
-            string filter = ServersFilter.Text;
-            if (filter.Length == 0) { return; }
-
-            if (server?.Name?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) { return; }
-            if (server?.ClientName?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) > -1) { return; }
-
-            e.Accepted = false;
-        }
-
-        private void ServersFilter_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            CollectionViewSource cvs = (CollectionViewSource)Resources["cvs"];
-            cvs.View.Refresh();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            _ = ServersFilter.Focus();
-            ServersFilter.Text = "";
         }
     }
 }

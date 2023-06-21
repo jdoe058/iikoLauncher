@@ -1,26 +1,62 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace iikoLauncher.Models
 {
     [Serializable()]
-    public class Server
+    public class Server : INotifyPropertyChanged
     {
-        [XmlAttribute]
-        public string ClientName { get; set; }
+        private string _ClientName;
+        private string _Name;
+        private string _Login;
 
         [XmlAttribute]
-        public string Name { get; set; }
+        public string ClientName
+        {
+            get => _ClientName;
+            set
+            {
+                _ClientName = value;
+                OnPropertyChanged();
+            }
+        }
 
         [XmlAttribute]
-        public string Login { get; set; }
+        public string Name
+        {
+            get => _Name;
+            set
+            {
+                _Name = value;
+                OnPropertyChanged();
+            }
+        }
 
         [XmlAttribute]
-        public string Password { get; set; }
+        public string Login {
+            get => string.IsNullOrWhiteSpace(_Login)
+                ? Properties.Settings.Default.IikoLogin
+                : _Login;
+            set
+            {
+                _Login = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [XmlIgnore]
+        public string Password
+        {
+            get => Encoding.UTF8.GetString(Convert.FromBase64String(Crypted_Password is null
+                    ? (string.IsNullOrWhiteSpace(Address)
+                        ? Properties.Settings.Default.AnyDeskPassword
+                        : Properties.Settings.Default.IikoPassword)
+                    : Crypted_Password));
+            set => Crypted_Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(value));
+        }
 
         [XmlAttribute]
         public string Address { get; set; }
@@ -28,13 +64,14 @@ namespace iikoLauncher.Models
         [XmlAttribute]
         public string Port { get; set; }
 
+        [XmlAttribute]
+        public string Crypted_Password;
 
-    }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    [Serializable()]
-    public class Servers
-    { 
-        [XmlElement]
-        public List<Server> Server { get; set; }
+        protected virtual void OnPropertyChanged([CallerMemberName] string PropertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
+        }
     }
 }

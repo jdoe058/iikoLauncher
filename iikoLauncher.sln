@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "connectionsToPOS", "..\conn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tbConn", "..\tbConn\tbConn.csproj", "{8286D37D-CB7A-47FA-B247-98A5288D991B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp2", "..\WpfApp2\WpfApp2.csproj", "{0F535875-2073-4D34-8DAF-74B7B6898EDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{8286D37D-CB7A-47FA-B247-98A5288D991B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8286D37D-CB7A-47FA-B247-98A5288D991B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8286D37D-CB7A-47FA-B247-98A5288D991B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F535875-2073-4D34-8DAF-74B7B6898EDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F535875-2073-4D34-8DAF-74B7B6898EDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F535875-2073-4D34-8DAF-74B7B6898EDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F535875-2073-4D34-8DAF-74B7B6898EDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

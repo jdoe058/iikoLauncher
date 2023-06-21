@@ -49,7 +49,7 @@ namespace iikoLauncher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("resto#test")]
+        [global::System.Configuration.DefaultSettingValueAttribute("cmVzdG8jdGVzdA==")]
         public string IikoPassword {
             get {
                 return ((string)(this["IikoPassword"]));
@@ -61,7 +61,7 @@ namespace iikoLauncher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("password")]
+        [global::System.Configuration.DefaultSettingValueAttribute("VGIjMTQ3ODUy")]
         public string AnyDeskPassword {
             get {
                 return ((string)(this["AnyDeskPassword"]));

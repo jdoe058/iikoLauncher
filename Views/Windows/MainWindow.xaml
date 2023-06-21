@@ -6,6 +6,7 @@
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:iikoLauncher"
+        xmlns:model="clr-namespace:iikoLauncher.Models"
         xmlns:vm="clr-namespace:iikoLauncher.ViewModels" 
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
@@ -14,62 +15,107 @@
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-    <Window.Resources>
-        <CollectionViewSource x:Key="cvs" Source="{Binding ServerList}" Filter="CollectionViewSource_Filter">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="ClientName"/>
-                <scm:SortDescription PropertyName="Name"/>
-            </CollectionViewSource.SortDescriptions>
-            <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription PropertyName="ClientName" />
-            </CollectionViewSource.GroupDescriptions>
-        </CollectionViewSource>
-    </Window.Resources>
+
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem Content="{Binding Status}"/>
         </StatusBar>
-
+        
         <DockPanel Margin="6" DockPanel.Dock="Top">
-            <Button DockPanel.Dock="Right" Click="Button_Click">
-                <Button.Content>
-                    <fa:ImageAwesome Icon="Ban"  Height="14"/>
-                </Button.Content>
-            </Button>
-            <Button>
-                <Button.Content>
-                    <fa:ImageAwesome Icon="Refresh" Height="14"/>
-                </Button.Content>
-            </Button>
-            <Button Margin="3,0">
+            <Button DockPanel.Dock="Left" Command="{Binding SaveConnectionListCommand}">
                 <Button.Content>
                     <fa:ImageAwesome Icon="Save" Height="14"/>
                 </Button.Content>
             </Button>
-            <fa:ImageAwesome Icon="Search" Height="14" Margin="0,3"/>
-            <TextBox Name="ServersFilter" Margin="3,0" TextChanged="ServersFilter_TextChanged"/>
+            <Button DockPanel.Dock="Right" Command="{Binding ClearAndFocusCommand}" CommandParameter="{Binding ElementName=ServersFilter}">
+                <Button.Content>
+                    <fa:ImageAwesome Icon="Ban" Margin="3,0" Height="14"/>
+                </Button.Content>
+            </Button>
+            <fa:ImageAwesome DockPanel.Dock="Left" Icon="Search" Height="14" Margin="3,0"/>
+            <TextBox Name="ServersFilter" Margin="3,0" Text="{Binding ConnectionFilter, UpdateSourceTrigger=PropertyChanged}"/>
         </DockPanel>
-        
-        <DataGrid AutoGenerateColumns="False" Name="dataGrid"
-                  ItemsSource="{Binding Source={StaticResource cvs}, Mode=OneWay}" 
-                  SelectedIndex="0"
-                  IsReadOnly="True">
-            <DataGrid.GroupStyle>
-                <GroupStyle/>
-            </DataGrid.GroupStyle>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
-                <DataGridTextColumn Header="Адрес" Binding="{Binding Address}"/>
-                <DataGridTextColumn Header="Порт" Binding="{Binding Port}"/>
-                <DataGridTextColumn Header="Логин" Binding="{Binding Login}"/>
-             </DataGrid.Columns>
+
+        <Expander DockPanel.Dock="Right" ExpandDirection="Left" IsExpanded="True">
+            <DockPanel Width="300">
+                <UniformGrid Rows="1" DockPanel.Dock="Bottom">
+                    <Button Content="AnyDesk" Margin="3" Command="{Binding LaunchAnyDeskCommand}"
+                            CommandParameter="{Binding SelectedConnection}"/>
+                    <Button Content="Office" Margin="3" Command="{Binding LaunchOfficeCommand}"
+                            CommandParameter="{Binding SelectedConnection}"/>
+                    <Button Content="Double" Margin="3"/>
+                </UniformGrid>
+
+                <TextBlock DockPanel.Dock="Top" Text="Клиент"/>
+                <TextBox DockPanel.Dock="Top" Text="{Binding SelectedConnection.ClientName}"/>
+                <TextBlock DockPanel.Dock="Top" Text="Название"/>
+                <TextBox DockPanel.Dock="Top" Text="{Binding SelectedConnection.Name}"/>
+                <TextBlock DockPanel.Dock="Top" Text="Логин"/>
+                <TextBox DockPanel.Dock="Top" Text="{Binding SelectedConnection.Login}"/>
+                <TextBlock DockPanel.Dock="Top" Text="Пароль"/>
+                <PasswordBox DockPanel.Dock="Top" />
+                <TextBlock DockPanel.Dock="Top" Text="Повтор пароля"/>
+                <PasswordBox DockPanel.Dock="Top" />
+                <TextBlock DockPanel.Dock="Top" Text="Адрес"/>
+                <TextBox DockPanel.Dock="Top" Text="{Binding SelectedConnection.Address}"/>
+                <TextBlock DockPanel.Dock="Top" Text="Порт"/>
+                <TextBox DockPanel.Dock="Top" Text="{Binding SelectedConnection.Port}"/>
+                <TextBlock Text=""/>
+            </DockPanel>
+        </Expander>
+
+        <ListBox Name="dataGrid"
+            ItemsSource="{Binding ServerList}" 
+            SelectedItem="{Binding SelectedConnection}"
+                 VirtualizingPanel.IsContainerVirtualizable="True"
+                 VirtualizingPanel.IsVirtualizing="True"
+                 VirtualizingPanel.VirtualizationMode="Recycling">
+            <ListBox.Resources>
+                <DataTemplate DataType="{x:Type model:Server}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding Login, StringFormat=\, {0}}"/>
+                        <TextBlock Text="{Binding Address, StringFormat=\, {0}}"/>
+                    </StackPanel>                    
+                </DataTemplate>
+            </ListBox.Resources>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
+            <ListBox.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="GroupItem">
+                                        <Expander IsEnabled="True" IsExpanded="True">
+                                            <Expander.Header>
+                                                <TextBlock Text="{Binding Path=Name}"/>
+                                            </Expander.Header>
+                                            <Expander.Content>
+                                                <ItemsPresenter/>
+                                            </Expander.Content>
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter> 
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListBox.GroupStyle>
+
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding LaunchOfficeCommand}" 
                                            CommandParameter="{Binding SelectedItem, ElementName=dataGrid }"/>
+                    <i:InvokeCommandAction Command="{Binding LaunchAnyDeskCommand}" 
+                                           CommandParameter="{Binding SelectedItem, ElementName=dataGrid }"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-        </DataGrid>
-
+        </ListBox>
     </DockPanel>
 </Window>

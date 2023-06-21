@@ -9,10 +9,10 @@
       <Value Profile="(Default)">admin</Value>
     </Setting>
     <Setting Name="IikoPassword" Type="System.String" Scope="User">
-      <Value Profile="(Default)">resto#test</Value>
+      <Value Profile="(Default)">cmVzdG8jdGVzdA==</Value>
     </Setting>
     <Setting Name="AnyDeskPassword" Type="System.String" Scope="User">
-      <Value Profile="(Default)">password</Value>
+      <Value Profile="(Default)">VGIjMTQ3ODUy</Value>
     </Setting>
     <Setting Name="AnyDeskPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">%ProgramFiles(x86)%\AnyDesk\AnyDesk.exe</Value>
